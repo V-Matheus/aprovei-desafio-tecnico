@@ -1,9 +1,41 @@
-@use "reset" as *;
-@use "variables" as *;
+@use 'reset' as *;
+@use 'variables' as *;
 
 body {
   font-family: Arial, sans-serif;
-  background-color:  $background-black;
+  background-color: $background-black;
   color: $text-white;
   font-size: 16px;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  width: 100%;
+
+  .list {
+    display: flex;
+    gap: 120px;
+    align-items: center;
+    width: 100%;
+    list-style: none;
+  }
+
+  .item {
+    color: $text-white;
+    font-size: 40;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .selected::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: $green;
+    margin-top: 5px;
+  }
 }
