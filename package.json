@@ -1,0 +1,19 @@
+{
+  "name": "aprovei",
+  "version": "1.0.0",
+  "description": "Projeto para o processo seletivo da \"Aprovei\"",
+  "main": "index.js",
+  "repository": "https://github.com/V-Matheus/aprovei-desafio-tecnico.git",
+  "author": "Victor Matheus <victormatheus507@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:sass": "sass src/styles:dist",
+    "build:ts": "tsc",
+    "start": "npm run build:sass & npm run build:ts & parcel src/index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.13.3",
+    "sass": "^1.83.4",
+    "typescript": "^5.7.3"
+  }
+}
