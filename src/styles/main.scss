@@ -1,5 +1,6 @@
-@use 'reset' as *;
 @use 'variables' as *;
+@use 'reset' as *;
+@use 'store' as *;
 
 body {
   font-family: Arial, sans-serif;
@@ -23,7 +24,7 @@ header {
     list-style: none;
   }
 
-  .item {
+  .item a {
     color: $text-white;
     font-size: 40;
     font-family: 'Inter', sans-serif;
