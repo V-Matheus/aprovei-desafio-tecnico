@@ -3,10 +3,13 @@
 @use 'store' as *;
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: Arial, sans-serif;
   background-color: $background-black;
   color: $text-white;
   font-size: 16px;
+  height: 100vh;
 }
 
 header {
@@ -39,4 +42,8 @@ header {
     background-color: $green;
     margin-top: 5px;
   }
+}
+
+main {
+  height: 100%;
 }

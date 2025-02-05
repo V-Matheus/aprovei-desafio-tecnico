@@ -1,27 +1,37 @@
 .store {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 5rem;
+  border: 2px solid gray;
+  border-radius: 15px;
+  padding: 5rem;
+  width: 800px;
+  margin: 7.5rem auto;
 
-  .product-store {
+
+  .inputs {
     display: flex;
-    padding: 1.25rem;
-    border: 2px solid 'red';
-    gap: 2rem;
-    cursor: pointer;
+    flex-direction: column;
+    gap: 5rem;
 
-    .product-info-store {
+    .store-label {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      font-size: 24px;
+      gap: 1rem;
+
+
+      input {
+        border: 2px solid gray;
+        border-radius: 15px;
+        background-color: transparent;
+        padding: 10px;
+        color: white;
+      }
     }
 
-    .img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+  
+    button {
+      padding: 10px 20px;
+      background-color: #7CCF00;
+      color: white;
     }
+    
   }
 }
