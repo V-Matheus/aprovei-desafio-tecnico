@@ -1,18 +1,22 @@
-<article class="store">
+<form class="store">
   <section class="inputs">
     <label for="name" class="store-label">
       Nome do Produto
-      <input type="text" placeholder="Coloque o nome do produto">
+      <input type="text" id="name" placeholder="Coloque o nome do produto" />
     </label>
     <label for="quant" class="store-label">
       Quantidade
-      <input type="number" placeholder="Coloque a quantidade">
+      <input type="number" id="quant" placeholder="Coloque a quantidade" />
     </label>
     <label for="price" class="store-label">
       Preço
-      <input type="number" placeholder="Coloque o preço">
+      <input type="number" id="price" placeholder="Coloque o preço" />
     </label>
 
-    <button>Adicionar ao carrinho</button>
+    <div>
+      <button class="button-submit" id="button-submit">
+        Adicionar ao carrinho
+      </button>
+    </div>
   </section>
-</article>
+</form>

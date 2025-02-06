@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const content = document.getElementById('content');
   const links = document.querySelectorAll('.item');
-  console.log('links', links);
 
   async function loadPage(page: string) {
     try {
@@ -12,6 +11,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (content) {
         content.innerHTML = html;
+      }
+
+      // Código para a página Loja
+
+      if (page === 'Loja') {
+        const nameInput = document.getElementById('name') as HTMLInputElement;
+        const quantInput = document.getElementById('quant') as HTMLInputElement;
+        const priceInput = document.getElementById('price') as HTMLInputElement;
+        const submitButton = document.querySelector('.button-submit');
+
+        if (!submitButton) return;
+
+        submitButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (nameInput.value && quantInput.value && priceInput.value) {
+            const product = {
+              name: nameInput.value,
+              quantity: quantInput.value,
+              price: priceInput.value,
+            };
+
+            let storedData = JSON.parse(
+              localStorage.getItem('products') || '{"products": []}',
+            );
+
+            if (!Array.isArray(storedData.products)) {
+              storedData.products = [];
+            }
+
+            storedData.products.push(product);
+
+            const productsString = JSON.stringify(storedData, null, 2);
+
+            localStorage.setItem('products', productsString);
+          } else {
+            console.log('Preencha todos os campos.');
+          }
+        });
       }
 
       links.forEach((link) => {
