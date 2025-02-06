@@ -1,4 +1,45 @@
 <article class="products">
+  <dialog class="products-modal" id="product-modal">
+    <form class="form-modal">
+      <article class="modal-container">
+        <section class="inputs-modal">
+          <label for="name" class="label-modal">
+            Nome do Produto
+            <input
+              type="text"
+              id="modal-name"
+              placeholder="Coloque o nome do produto"
+            />
+          </label>
+          <label for="quant" class="label-modal">
+            Quantidade
+            <input
+              type="number"
+              id="modal-quant"
+              placeholder="Coloque a quantidade"
+            />
+          </label>
+          <label for="price" class="label-modal">
+            Preço
+            <input type="number" id="modal-price" placeholder="Coloque o preço" />
+          </label>
+        </section>
+
+        <section>
+          <button type="button" class="button-change" id="button-change">
+            Alterar produto
+          </button>
+
+          <button type="button" class="button-delete" id="button-delete">
+            Deletar produto
+          </button>
+        </section>
+      </article>
+
+      <button type="button" class="button-close" id="button-close">X</button>
+    </form>
+  </dialog>
+
   <h1>Produtos</h1>
 
   <section>
@@ -13,5 +54,5 @@
     </ul>
   </section>
 
-  <section class="table" />
+  <section class="table"></section>
 </article>

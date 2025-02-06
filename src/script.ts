@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
           default:
             return '#cf3e00';
         }
-      }
+      };
 
       // Código para a página Loja
 
@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantity: quantInput.value,
                 price: priceInput.value,
                 date: formatDate(new Date()),
-                total: parseFloat(priceInput.value) * parseInt(quantInput.value),
+                total:
+                  parseFloat(priceInput.value) * parseInt(quantInput.value),
                 status: 'Pendente',
               };
 
@@ -99,22 +100,48 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.getItem('products') || '{"products": []}',
         ) as {
           products: {
-            code: number,
-            name: string,
-            quantity: string,
-            price: string,
-            date: string,
-            total: number,
-            status: string,
-          }[]
+            code: number;
+            name: string;
+            quantity: string;
+            price: string;
+            date: string;
+            total: number;
+            status: string;
+          }[];
         };
 
         let table = document.querySelector('.table');
+        const modal = document.getElementById(
+          'product-modal',
+        ) as HTMLDialogElement;
+        const closeButton = document.getElementById(
+          'button-close',
+        ) as HTMLButtonElement;
+        const deleteButton = document.getElementById(
+          'button-delete',
+        ) as HTMLButtonElement;
+        const changeButton = document.getElementById(
+          'button-change',
+        ) as HTMLButtonElement;
+
+        const modalNameInput = document.getElementById(
+          'modal-name',
+        ) as HTMLInputElement;
+        const modalQuantInput = document.getElementById(
+          'modal-quant',
+        ) as HTMLInputElement;
+        const modalPriceInput = document.getElementById(
+          'modal-price',
+        ) as HTMLInputElement;
+
+        modal.close();
+        modal.style.display = 'none';
+
         if (table) {
           table.innerHTML = storedData.products
             .map(
-              (row) => `
-                <div class="row">
+              (row, index) => `
+                <div class="row" data-index="${index}">
                   <ul class="values">
                     <li>#${row.code}</li>
                     <li>${row.date}</li>
@@ -122,90 +149,152 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>${row.quantity}</li>
                     <li>R$ ${Number(row.price).toFixed(2)}</li>
                     <li>R$ ${Number(row.total).toFixed(2)}</li>
-                    <li style="color: ${verifyStatus(row.status)}">${row.status}</li>
+                    <li style="color: ${verifyStatus(row.status)}">${
+                row.status
+              }</li>
                   </ul>
                   <br class="break" />
                 </div>
-              `
-            ).join('');
+              `,
+            )
+            .join('');
         }
+
+        if (!table) return;
+        table.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          const target = event.target as HTMLElement;
+          const row = target.closest('.row');
+
+          if (row) {
+            const index = row.getAttribute('data-index');
+            if (!index) return;
+            const product = storedData.products[Number(index)];
+
+            modalNameInput.value = product.name;
+            modalQuantInput.value = product.quantity;
+            modalPriceInput.value = product.price;
+
+            modal.showModal();
+            modal.style.display = 'flex';
+
+            deleteButton.onclick = () => {
+              storedData.products.splice(Number(index), 1);
+              localStorage.setItem(
+                'products',
+                JSON.stringify(storedData, null, 2),
+              );
+              modal.close();
+              modal.style.display = 'none';
+
+              location.reload();
+            };
+
+            changeButton.onclick = () => {
+              product.name = modalNameInput.value;
+              product.quantity = modalQuantInput.value;
+              product.price = modalPriceInput.value;
+              product.total = Number(product.price) * Number(product.quantity);
+
+              localStorage.setItem(
+                'products',
+                JSON.stringify(storedData, null, 2),
+              );
+              modal.close();
+              modal.style.display = 'none';
+
+              location.reload();
+            };
+          }
+        });
+
+        closeButton.onclick = () => {
+          modal.close();
+          modal.style.display = 'none';
+        };
       }
 
       // Código para a página Status
 
       if (page === 'Status') {
-
-        const storedData = JSON.parse(localStorage.getItem('products') || '{"products": []}') as {
+        const storedData = JSON.parse(
+          localStorage.getItem('products') || '{"products": []}',
+        ) as {
           products: {
-            code: number,
-            name: string,
-            quantity: string,
-            price: string,
-            date: string,
-            total: number,
-            status: string,
-          }[]
+            code: number;
+            name: string;
+            quantity: string;
+            price: string;
+            date: string;
+            total: number;
+            status: string;
+          }[];
         };
 
         const renderColumns = () => {
           const columns: { [key: string]: Element | null } = {
-            'Pendente': document.getElementById('colPendente'),
+            Pendente: document.getElementById('colPendente'),
             'Em Transporte': document.getElementById('colEmTransporte'),
-            'Entregue': document.getElementById('colEntregue')
+            Entregue: document.getElementById('colEntregue'),
           };
 
-          Object.keys(columns).forEach(status => {
+          Object.keys(columns).forEach((status) => {
             const column = columns[status];
             if (column) {
               column.innerHTML = `
               <h3>${status}</h3>
               ${storedData.products
-                  .filter(product => product.status === status)
-                  .map(product => `
-                  <div class="card" id="${product.code}" draggable="true" style="border-color: ${verifyStatus(product.status)}">
+                .filter((product) => product.status === status)
+                .map(
+                  (product) => `
+                  <div class="card" id="${
+                    product.code
+                  }" draggable="true" style="border-color: ${verifyStatus(
+                    product.status,
+                  )}">
                     ${product.name}
                   </div>
-                `).join('')
-            }
-            ` 
+                `,
+                )
+                .join('')}
+            `;
             }
           });
 
           enableDragAndDrop();
         };
 
-
         const enableDragAndDrop = () => {
           const columns = document.querySelectorAll('.kanban-column');
           const cards = document.querySelectorAll('.card');
 
-          cards.forEach(card => {
+          cards.forEach((card) => {
             card.addEventListener('dragstart', dragStart as EventListener);
           });
 
-          columns.forEach(column => {
+          columns.forEach((column) => {
             column.addEventListener('dragover', dragOver as EventListener);
             column.addEventListener('drop', drop as EventListener);
             column.addEventListener('dragleave', dragLeave as EventListener);
           });
         };
 
-
         const dragStart = (event: DragEvent) => {
           const card = event.target as HTMLElement;
           event.dataTransfer?.setData('text/plain', card.id);
-        }
+        };
 
         const dragOver = (event: DragEvent) => {
           event.preventDefault();
           const column = event.target as HTMLElement;
           column.classList.add('drag-over');
-        }
+        };
 
         const dragLeave = (event: DragEvent) => {
           const column = event.target as HTMLElement;
           column.classList.remove('drag-over');
-        }
+        };
 
         const drop = (event: DragEvent) => {
           event.preventDefault();
@@ -218,11 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
           if (cardId && newStatus) {
             const card = document.getElementById(cardId);
             if (card) {
-              const product = storedData.products.find(p => Number(p.code) === Number(cardId));
+              const product = storedData.products.find(
+                (p) => Number(p.code) === Number(cardId),
+              );
 
               if (product) {
                 product.status = newStatus;
-                localStorage.setItem('products', JSON.stringify(storedData, null, 2));
+                localStorage.setItem(
+                  'products',
+                  JSON.stringify(storedData, null, 2),
+                );
                 renderColumns();
               }
             }
