@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
               price: priceInput.value,
               date: formatDate(new Date()),
               total: parseFloat(priceInput.value) * parseInt(quantInput.value),
+              status: 'Pendente',
             };
 
             let storedData = JSON.parse(
@@ -66,6 +67,46 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Preencha todos os campos.');
           }
         });
+      }
+
+      if (page === 'Produtos') {
+        let storedData = JSON.parse(
+          localStorage.getItem('products') || '{"products": []}',
+        ) as {
+          products: {
+            code: number,
+            name: string,
+            quantity: string,
+            price: string,
+            date: string,
+            total: number,
+            status: string,
+          }[]
+        };
+
+        let table = document.querySelector('.table');
+        if (table) {
+          table.innerHTML = storedData.products
+            .map(
+              (row) => `
+                <div class="row">
+                  <ul class="values">
+                    <li>#${row.code}</li>
+                    <li>${row.date}</li>
+                    <li>${row.name}</li>
+                    <li>${row.quantity}</li>
+                    <li>${row.price}</li>
+                    <li>${row.total}</li>
+                    <li>${row.status}</li>
+                  </ul>
+                  <br class="break" />
+                </div>
+              `
+            ).join('');
+          }
+
+
+        console.log(storedData)
       }
 
       links.forEach((link) => {
