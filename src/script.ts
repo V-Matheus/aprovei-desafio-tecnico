@@ -84,6 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
           }[]
         };
 
+        const verifyStatus = (status: string) => {
+          switch(status) {
+            case 'Pendente':
+              return '#cf3e00';
+            case 'Entregue':
+              return '#7ccf00';
+            case 'Em andamento':
+              return '#FDD301';
+            default:
+              return '#cf3e00';
+          }
+        }
+
         let table = document.querySelector('.table');
         if (table) {
           table.innerHTML = storedData.products
@@ -97,16 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>${row.quantity}</li>
                     <li>${row.price}</li>
                     <li>${row.total}</li>
-                    <li>${row.status}</li>
+                    <li style="color: ${verifyStatus(row.status)}">${row.status}</li>
                   </ul>
                   <br class="break" />
                 </div>
               `
             ).join('');
           }
-
-
-        console.log(storedData)
       }
 
       links.forEach((link) => {
