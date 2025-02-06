@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>${row.date}</li>
                     <li>${row.name}</li>
                     <li>${row.quantity}</li>
-                    <li>${row.price}</li>
-                    <li>${row.total}</li>
+                    <li>R$ ${Number(row.price).toFixed(2)}</li>
+                    <li>R$ ${Number(row.total).toFixed(2)}</li>
                     <li style="color: ${verifyStatus(row.status)}">${row.status}</li>
                   </ul>
                   <br class="break" />
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
               column.innerHTML = storedData.products
                 .filter(product => product.status === status)
                 .map(product => `
-                  <div class="card" id="card-${product.code}" draggable="true" style="border-color: ${verifyStatus(product.status)}">
+                  <div class="card" id="${product.code}" draggable="true" style="border-color: ${verifyStatus(product.status)}">
                     ${product.name}
                   </div>
                 `).join('');
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dragStart = (event: DragEvent) => {
           const card = event.target as HTMLElement;
-          event.dataTransfer?.setData('text', card.innerHTML);
+          event.dataTransfer?.setData('text/plain', card.id);
         }
 
         const dragOver = (event: DragEvent) => {
@@ -199,10 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const cardId = event.dataTransfer?.getData('text/plain');
           const newStatus = column.getAttribute('data-status');
 
+
           if (cardId && newStatus) {
             const card = document.getElementById(cardId);
             if (card) {
-              const product = storedData.products.find(p => `card-${p.code}` === cardId);
+              const product = storedData.products.find(p => Number(p.code) === Number(cardId));
+              
               if (product) {
                 product.status = newStatus;
                 localStorage.setItem('products', JSON.stringify(storedData, null, 2));
@@ -212,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         };
 
-        // Inicializa o drag and drop
         renderColumns();
       }
 
