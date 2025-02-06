@@ -26,10 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.addEventListener('click', (event) => {
           event.preventDefault();
           if (nameInput.value && quantInput.value && priceInput.value) {
+            const generateCode = () =>
+              Math.floor(10000000 + Math.random() * 90000000).toString();
+
+            const formatDate = (date: Date) => {
+              const day = String(date.getDate()).padStart(2, '0');
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const year = date.getFullYear();
+              return `${day}/${month}/${year}`;
+            };
+
             const product = {
+              code: generateCode(),
               name: nameInput.value,
               quantity: quantInput.value,
               price: priceInput.value,
+              date: formatDate(new Date()),
+              total: parseFloat(priceInput.value) * parseInt(quantInput.value),
             };
 
             let storedData = JSON.parse(
@@ -45,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const productsString = JSON.stringify(storedData, null, 2);
 
             localStorage.setItem('products', productsString);
+
+            nameInput.value = '';
+            quantInput.value = '';
+            priceInput.value = '';
           } else {
             console.log('Preencha todos os campos.');
           }
@@ -67,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   links.forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      const page = link.getAttribute('data-page');
+      const page = (link as HTMLElement).innerText;
       if (page) loadPage(page);
     });
   });
