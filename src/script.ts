@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return '#cf3e00';
           case 'Entregue':
             return '#7ccf00';
-          case 'Em andamento':
+          case 'Em Transporte':
             return '#FDD301';
           default:
             return '#cf3e00';
@@ -150,20 +150,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const renderColumns = () => {
           const columns: { [key: string]: Element | null } = {
             'Pendente': document.getElementById('colPendente'),
-            'Em andamento': document.getElementById('colEmAndamento'),
+            'Em Transporte': document.getElementById('colEmTransporte'),
             'Entregue': document.getElementById('colEntregue')
           };
 
           Object.keys(columns).forEach(status => {
             const column = columns[status];
             if (column) {
-              column.innerHTML = storedData.products
-                .filter(product => product.status === status)
-                .map(product => `
+              column.innerHTML = `
+              <h3>${status}</h3>
+              ${storedData.products
+                  .filter(product => product.status === status)
+                  .map(product => `
                   <div class="card" id="${product.code}" draggable="true" style="border-color: ${verifyStatus(product.status)}">
                     ${product.name}
                   </div>
-                `).join('');
+                `).join('')
+            }
+            ` 
             }
           });
 
@@ -209,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const cardId = event.dataTransfer?.getData('text/plain');
           const newStatus = column.getAttribute('data-status');
 
+          column.classList.remove('drag-over');
 
           if (cardId && newStatus) {
             const card = document.getElementById(cardId);
