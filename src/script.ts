@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.addEventListener('click', (event) => {
           event.preventDefault();
           if (nameInput.value && quantInput.value && priceInput.value) {
-            submitButton.textContent = 'Carregando...';
+            submitButton.textContent = 'Processando pagamento...';
 
             setTimeout(() => {
               const generateCode = () =>
@@ -81,10 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
               quantInput.value = '';
               priceInput.value = '';
 
-              submitButton.textContent = 'Produto adicionado!';
+              submitButton.textContent = 'Pagamento aprovado!';
 
               setTimeout(() => {
-                submitButton.textContent = 'Adicionar ao carrinho';
+                submitButton.textContent = 'Finalizar Compra';
               }, 2000);
             }, 3000);
           } else {
