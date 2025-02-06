@@ -39,43 +39,53 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.addEventListener('click', (event) => {
           event.preventDefault();
           if (nameInput.value && quantInput.value && priceInput.value) {
-            const generateCode = () =>
-              Math.floor(10000000 + Math.random() * 90000000).toString();
+            submitButton.textContent = 'Carregando...';
 
-            const formatDate = (date: Date) => {
-              const day = String(date.getDate()).padStart(2, '0');
-              const month = String(date.getMonth() + 1).padStart(2, '0');
-              const year = date.getFullYear();
-              return `${day}/${month}/${year}`;
-            };
+            setTimeout(() => {
+              const generateCode = () =>
+                Math.floor(10000000 + Math.random() * 90000000).toString();
 
-            const product = {
-              code: generateCode(),
-              name: nameInput.value,
-              quantity: quantInput.value,
-              price: priceInput.value,
-              date: formatDate(new Date()),
-              total: parseFloat(priceInput.value) * parseInt(quantInput.value),
-              status: 'Pendente',
-            };
+              const formatDate = (date: Date) => {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+              };
 
-            let storedData = JSON.parse(
-              localStorage.getItem('products') || '{"products": []}',
-            );
+              const product = {
+                code: generateCode(),
+                name: nameInput.value,
+                quantity: quantInput.value,
+                price: priceInput.value,
+                date: formatDate(new Date()),
+                total: parseFloat(priceInput.value) * parseInt(quantInput.value),
+                status: 'Pendente',
+              };
 
-            if (!Array.isArray(storedData.products)) {
-              storedData.products = [];
-            }
+              let storedData = JSON.parse(
+                localStorage.getItem('products') || '{"products": []}',
+              );
 
-            storedData.products.push(product);
+              if (!Array.isArray(storedData.products)) {
+                storedData.products = [];
+              }
 
-            const productsString = JSON.stringify(storedData, null, 2);
+              storedData.products.push(product);
 
-            localStorage.setItem('products', productsString);
+              const productsString = JSON.stringify(storedData, null, 2);
 
-            nameInput.value = '';
-            quantInput.value = '';
-            priceInput.value = '';
+              localStorage.setItem('products', productsString);
+
+              nameInput.value = '';
+              quantInput.value = '';
+              priceInput.value = '';
+
+              submitButton.textContent = 'Produto adicionado!';
+
+              setTimeout(() => {
+                submitButton.textContent = 'Adicionar ao carrinho';
+              }, 2000);
+            }, 3000);
           } else {
             console.log('Preencha todos os campos.');
           }
@@ -204,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.getElementById(cardId);
             if (card) {
               const product = storedData.products.find(p => Number(p.code) === Number(cardId));
-              
+
               if (product) {
                 product.status = newStatus;
                 localStorage.setItem('products', JSON.stringify(storedData, null, 2));
