@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem;
+}
+
+.kanban {
+    display: flex;
+    gap: 1.25rem;
+    height: 100%;
+
+
+    .kanban-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        width: 20rem;
+        padding: 2.5rem;
+        border-radius: 8px;
+    }
+
+    .kanban-column h3 {
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .card {
+        padding: 15px;
+        border-radius: 8px;
+        border: 2px solid red;
+        cursor: grab;
+    }
+
+    .card:active {
+        cursor: grabbing;
+    }
+
+    .kanban-column.drag-over {
+        background-color: #e0e0e0;
+    }
+}

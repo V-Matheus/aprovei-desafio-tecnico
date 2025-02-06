@@ -13,6 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
         content.innerHTML = html;
       }
 
+      const verifyStatus = (status: string) => {
+        switch (status) {
+          case 'Pendente':
+            return '#cf3e00';
+          case 'Entregue':
+            return '#7ccf00';
+          case 'Em andamento':
+            return '#FDD301';
+          default:
+            return '#cf3e00';
+        }
+      }
+
       // Código para a página Loja
 
       if (page === 'Loja') {
@@ -69,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
+      // Código para a página Produtos
+
       if (page === 'Produtos') {
         let storedData = JSON.parse(
           localStorage.getItem('products') || '{"products": []}',
@@ -83,19 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
             status: string,
           }[]
         };
-
-        const verifyStatus = (status: string) => {
-          switch(status) {
-            case 'Pendente':
-              return '#cf3e00';
-            case 'Entregue':
-              return '#7ccf00';
-            case 'Em andamento':
-              return '#FDD301';
-            default:
-              return '#cf3e00';
-          }
-        }
 
         let table = document.querySelector('.table');
         if (table) {
@@ -116,7 +118,102 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               `
             ).join('');
+        }
+      }
+
+      // Código para a página Status
+
+      if (page === 'Status') {
+
+        const storedData = JSON.parse(localStorage.getItem('products') || '{"products": []}') as {
+          products: {
+            code: number,
+            name: string,
+            quantity: string,
+            price: string,
+            date: string,
+            total: number,
+            status: string,
+          }[]
+        };
+
+        const renderColumns = () => {
+          const columns: { [key: string]: Element | null } = {
+            'Pendente': document.getElementById('colPendente'),
+            'Em andamento': document.getElementById('colEmAndamento'),
+            'Entregue': document.getElementById('colEntregue')
+          };
+
+          Object.keys(columns).forEach(status => {
+            const column = columns[status];
+            if (column) {
+              column.innerHTML = storedData.products
+                .filter(product => product.status === status)
+                .map(product => `
+                  <div class="card" id="card-${product.code}" draggable="true" style="border-color: ${verifyStatus(product.status)}">
+                    ${product.name}
+                  </div>
+                `).join('');
+            }
+          });
+
+          enableDragAndDrop();
+        };
+
+
+        const enableDragAndDrop = () => {
+          const columns = document.querySelectorAll('.kanban-column');
+          const cards = document.querySelectorAll('.card');
+
+          cards.forEach(card => {
+            card.addEventListener('dragstart', dragStart as EventListener);
+          });
+
+          columns.forEach(column => {
+            column.addEventListener('dragover', dragOver as EventListener);
+            column.addEventListener('drop', drop as EventListener);
+            column.addEventListener('dragleave', dragLeave as EventListener);
+          });
+        };
+
+
+        const dragStart = (event: DragEvent) => {
+          const card = event.target as HTMLElement;
+          event.dataTransfer?.setData('text', card.innerHTML);
+        }
+
+        const dragOver = (event: DragEvent) => {
+          event.preventDefault();
+          const column = event.target as HTMLElement;
+          column.classList.add('drag-over');
+        }
+
+        const dragLeave = (event: DragEvent) => {
+          const column = event.target as HTMLElement;
+          column.classList.remove('drag-over');
+        }
+
+        const drop = (event: DragEvent) => {
+          event.preventDefault();
+          const column = event.target as HTMLElement;
+          const cardId = event.dataTransfer?.getData('text/plain');
+          const newStatus = column.getAttribute('data-status');
+
+          if (cardId && newStatus) {
+            const card = document.getElementById(cardId);
+            if (card) {
+              const product = storedData.products.find(p => `card-${p.code}` === cardId);
+              if (product) {
+                product.status = newStatus;
+                localStorage.setItem('products', JSON.stringify(storedData, null, 2));
+                renderColumns();
+              }
+            }
           }
+        };
+
+        // Inicializa o drag and drop
+        renderColumns();
       }
 
       links.forEach((link) => {
