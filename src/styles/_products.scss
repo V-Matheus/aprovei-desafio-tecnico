@@ -1,0 +1,59 @@
+.products {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 2.75rem;
+
+  h1 {
+    font-size: 3rem;
+    padding-left: 3.75rem;
+  }
+
+  .labels {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #c2c2c2;
+    border-radius: 15px;
+    padding: 2.25rem 3.75rem;
+    list-style: none;
+
+    li {
+      font-size: 1.5rem;
+    }
+  }
+
+  .table {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border: 2px solid #c2c2c2;
+    border-radius: 15px;
+    padding: 2rem 2.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .row {
+      display: flex;
+      gap: 1.25rem;
+      width: 100%;
+      flex-direction: column;
+
+      .values {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+
+        li {
+          font-size: 1.5rem;
+        }
+      }
+
+      .break {
+        content: '';
+        background-color: #c2c2c2;
+        height: 2px;
+      }
+    }
+  }
+}

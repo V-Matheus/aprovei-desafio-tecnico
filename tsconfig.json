@@ -3,6 +3,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "lib": ["ES2015", "DOM"]
+    "lib": ["es2017", "dom"],
   }
 }
